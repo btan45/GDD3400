@@ -24,7 +24,16 @@
     <Compile Include="Constants.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enemy.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GDD3400.py" />
+    <Compile Include="Player.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Vector.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
