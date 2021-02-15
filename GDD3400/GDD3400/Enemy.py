@@ -13,6 +13,7 @@ class Enemy(Agent):
     def __init__(self, initialPosition, initialSpeed, size, color):
         super().__init__(initialPosition, initialSpeed, size, color)
         self.behavior = EnemyBehavior.SEEKING
+        self.normalColor = color
         self.iFrames = 0
 
     def draw(self, screen, player):
@@ -58,12 +59,10 @@ class Enemy(Agent):
         
         if self.iFrames > 0:
             if self.iFrames % Constants.FLASHING_FRAMES == 1:
-                if self.color == Constants.ENEMY_COLOR:
+                if self.color == self.normalColor:
                     self.color = Constants.ENEMY_I_FRAME_COLOR
                 else:
-                    self.color = Constants.ENEMY_COLOR
+                    self.color = self.normalColor
             self.iFrames -= 1
 
         super().update(boundx, boundy)
-        
-

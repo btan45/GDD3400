@@ -3,6 +3,7 @@ import Constants
 from Vector import Vector
 from Player import Player
 from Enemy import Enemy
+from EnemyHunter import EnemyHunter
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -16,6 +17,7 @@ isRunning = False
 # create player
 player = Player(Constants.PLAYER_POSITION, Constants.PLAYER_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR)
 enemy = Enemy(Constants.ENEMY_POSITION, Constants.ENEMY_SPEED, Constants.ENEMY_SIZE, Constants.ENEMY_COLOR)
+enemyHunter = EnemyHunter(Constants.ENEMY_POSITION, Constants.ENEMY_SPEED, Constants.ENEMY_SIZE, Constants.ENEMY_HUNTER_COLOR)
 
 while not isRunning:
     screen.fill(Constants.BACKGROUND_COLOR)
@@ -32,6 +34,10 @@ while not isRunning:
     # enemy
     enemy.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, player)
     enemy.draw(screen, player)
+
+    # enemyHunter
+    enemyHunter.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, player)
+    enemyHunter.draw(screen, player)
 
     pygame.display.flip()
     clock.tick(Constants.FRAME_RATE)
