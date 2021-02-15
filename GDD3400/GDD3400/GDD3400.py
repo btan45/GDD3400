@@ -30,7 +30,7 @@ while not isRunning:
 
     # enemy
     enemy.update(player)
-    enemy.draw(screen)
+    enemy.draw(screen, player)
 
     pygame.display.flip()
     clock.tick(Constants.FRAME_RATE)

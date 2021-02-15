@@ -1,39 +1,57 @@
 import pygame
-from Vector import Vector
 import Constants
+from Vector import Vector
+from Agent import Agent
+from enum import Enum
 
-class Enemy:
-    def __init__(self, initialPosition, initialSpeed, initialSize, color):
-        self.position = initialPosition
-        self.speed = initialSpeed
-        self.size = initialSize
-        self.velocity = Constants.ZERO_VECTOR
-        self.center = self.position + Vector(self.size/2, self.size/2)
-        self.color = color
-    
-    def __str__(self):
-        return "Size: {}, Position: {}, Velocity: {}, Center: {}".format(self.size, self.position, self.velocity, self.center)
+class EnemyBehavior(Enum):
+    SEEKING = 0
+    FOLLOWING = 1
+    FLEEING = 2
 
-    def draw(self, screen):
-        # draws the rectangle
-        rectangle = pygame.Rect(self.position.x, self.position.y, self.size, self.size)
-        pygame.draw.rect(screen, self.color, rectangle)
+class Enemy(Agent):
+    def __init__(self, initialPosition, initialSpeed, size, color):
+        super().__init__(initialPosition, initialSpeed, size, color)
+        self.behavior = EnemyBehavior.SEEKING
 
-        # line positions
-        enemyPos = (self.position.x, self.position.y)
-        enemyNextPos = (self.position.x + (self.velocity.x * 10), self.position.y + (self.velocity.y * 10))
-        # drawing line
-        pygame.draw.line(screen, Constants.ENEMY_LINE_COLOR, enemyPos, enemyNextPos)
+    def draw(self, screen, player):
+        super().draw(screen)
+        if self.behavior == EnemyBehavior.FOLLOWING:
+            # line position
+            startingPos = (self.center.x, self.center.y)
+            nextPos = (player.center.x, player.center.y)
+            pygame.draw.line(screen, Constants.SEEKING_LINE_COLOR, startingPos, nextPos)
 
     def seek(self, player):
         range = player.position - self.position
         length = range.length()
 
         if length < Constants.ATTACK_RANGE:
-            self.velocity = range.normalize().scale(self.speed)
-            self.position += self.velocity
+            self.velocity = range.normalize()
+            self.behavior = EnemyBehavior.FOLLOWING
+        else:
+            self.velocity = Constants.ZERO_VECTOR
+            self.behavior = EnemyBehavior.SEEKING
+
+    def flee(self, player):
+        range = player.position - self.position
+        length = range.length()
+
+        if length < Constants.ATTACK_RANGE:
+            self.velocity = range.normalize().scale(-1)
+        else:
+            self.velocity = Constants.ZERO_VECTOR
 
     def update(self, player):
-        self.seek(player)
+        if self.collision(player):
+            if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
+                self.behavior = EnemyBehavior.FLEEING
+            elif self.behavior == EnemyBehavior.FLEEING:
+                self.behavior = EnemyBehavior.SEEKING
+        if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
+            self.seek(player)
+        elif self.behavior == EnemyBehavior.FLEEING:
+            self.flee(player)
+        super().update()
         
 
