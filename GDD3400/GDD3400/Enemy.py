@@ -13,6 +13,7 @@ class Enemy(Agent):
     def __init__(self, initialPosition, initialSpeed, size, color):
         super().__init__(initialPosition, initialSpeed, size, color)
         self.behavior = EnemyBehavior.SEEKING
+        self.iFrames = 0
 
     def draw(self, screen, player):
         super().draw(screen)
@@ -43,15 +44,26 @@ class Enemy(Agent):
             self.velocity = Constants.ZERO_VECTOR
 
     def update(self, boundx, boundy, player):
-        if self.collision(player):
+        if self.collision(player) and self.iFrames == 0:
+            self.iFrames = Constants.I_FRAMES
             if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
                 self.behavior = EnemyBehavior.FLEEING
             elif self.behavior == EnemyBehavior.FLEEING:
                 self.behavior = EnemyBehavior.SEEKING
+
         if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
             self.seek(player)
         elif self.behavior == EnemyBehavior.FLEEING:
             self.flee(player)
+        
+        if self.iFrames > 0:
+            if self.iFrames % Constants.FLASHING_FRAMES == 1:
+                if self.color == Constants.ENEMY_COLOR:
+                    self.color = Constants.ENEMY_I_FRAME_COLOR
+                else:
+                    self.color = Constants.ENEMY_COLOR
+            self.iFrames -= 1
+
         super().update(boundx, boundy)
         
 
