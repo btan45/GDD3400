@@ -23,13 +23,14 @@ while not isRunning:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             isRunning = True
+            pygame.quit()
 
     # player
-    player.update()
+    player.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT)
     player.draw(screen)
 
     # enemy
-    enemy.update(player)
+    enemy.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, player)
     enemy.draw(screen, player)
 
     pygame.display.flip()

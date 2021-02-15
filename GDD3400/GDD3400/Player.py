@@ -33,9 +33,9 @@ class Player(Agent):
             self.velocity = Constants.RIGHT_VECTOR
         else:
             self.velocity = Constants.ZERO_VECTOR
-    def update(self):
+    def update(self, boundx, boundy):
         self.handleKeyPressed()
-        super().update()
+        super().update(boundx, boundy)
   
     
 

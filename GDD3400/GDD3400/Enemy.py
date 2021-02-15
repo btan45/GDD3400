@@ -42,7 +42,7 @@ class Enemy(Agent):
         else:
             self.velocity = Constants.ZERO_VECTOR
 
-    def update(self, player):
+    def update(self, boundx, boundy, player):
         if self.collision(player):
             if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
                 self.behavior = EnemyBehavior.FLEEING
@@ -52,6 +52,6 @@ class Enemy(Agent):
             self.seek(player)
         elif self.behavior == EnemyBehavior.FLEEING:
             self.flee(player)
-        super().update()
+        super().update(boundx, boundy)
         
 

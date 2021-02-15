@@ -28,10 +28,19 @@ class Agent:
     def collision(self, object):
         return pygame.Rect.colliderect(self.rect, object.rect)
 
-    def update(self):
+    def update(self, boundx, boundy):
         self.velocity = self.velocity.scale(self.speed)
         self.position += self.velocity
         self.center = self.position + Vector(self.size/2, self.size/2)
         self.rect = pygame.Rect(self.position.x, self.position.y, self.size, self.size)
+
+        if self.position.x < 0:
+            self.position.x = 0
+        elif self.position.x + self.size > boundx:
+            self.position.x = boundx - self.size
+        if self.position.y < 0:
+            self.position.y = 0
+        elif self.position.y + self.size > boundy:
+            self.position.y = boundy - self.size
 
    
