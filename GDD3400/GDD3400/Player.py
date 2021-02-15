@@ -36,6 +36,7 @@ class Player(Agent):
 
     def update(self, boundx, boundy):
         self.handleKeyPressed()
+        # calls parent, Agent
         super().update(boundx, boundy)
   
     

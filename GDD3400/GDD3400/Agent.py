@@ -26,14 +26,20 @@ class Agent:
         pygame.draw.line(screen, Constants.LINE_COLOR, startingPos, nextPos)
 
     def collision(self, object):
+        # returns bool of wether or not a collision happened
         return pygame.Rect.colliderect(self.rect, object.rect)
 
     def update(self, boundx, boundy):
+        # velocity
         self.velocity = self.velocity.scale(self.speed)
+        # position
         self.position += self.velocity
+        # center
         self.center = self.position + Vector(self.size/2, self.size/2)
+        # rectangle
         self.rect = pygame.Rect(self.position.x, self.position.y, self.size, self.size)
 
+        # creates bounds for the agent
         if self.position.x < 0:
             self.position.x = 0
         elif self.position.x + self.size > boundx:

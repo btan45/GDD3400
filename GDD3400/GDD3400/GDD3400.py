@@ -6,6 +6,7 @@ from Player import Player
 from Enemy import Enemy
 from EnemyHunter import EnemyHunter
 
+# random vector generator
 def randomVector():
     randomx = random.randint(0, Constants.WORLD_WIDTH)
     randomy = random.randint(0, Constants.WORLD_HEIGHT)
@@ -23,8 +24,9 @@ isRunning = False
 # create player
 player = Player(Constants.PLAYER_POSITION, Constants.PLAYER_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR)
 
+# enemy list
 enemies = []
-
+# fill in list with enemies
 for i in range(Constants.NUM_ENEMIES):
     enemy = Enemy(randomVector(), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE, Constants.ENEMY_COLOR)
     enemyHunter = EnemyHunter(randomVector(), Constants.ENEMY_SPEED, Constants.ENEMY_SIZE, Constants.ENEMY_HUNTER_COLOR)
@@ -32,8 +34,7 @@ for i in range(Constants.NUM_ENEMIES):
     enemies.append(enemy)
     enemies.append(enemyHunter)
 
-
-
+# game loop
 while not isRunning:
     screen.fill(Constants.BACKGROUND_COLOR)
 
