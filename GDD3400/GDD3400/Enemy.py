@@ -20,53 +20,69 @@ class Enemy(Agent):
         # invulnerabilty frames
         self.iFrames = 0
 
+    def switchMode(self):
+        # changes behavior based on what it is currently
+        if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
+            self.behavior = EnemyBehavior.FLEEING
+        elif self.behavior == EnemyBehavior.FLEEING:
+            self.behavior = EnemyBehavior.SEEKING
+
+    def isPlayerClose(self, player):
+        # finds the player's current position from enemy position
+        range = player.position - self.position
+        length = range.length()
+        isInRange = length < Constants.ATTACK_RANGE
+        
+        if isInRange and self.behavior == EnemyBehavior.SEEKING:
+            self.behavior = EnemyBehavior.FOLLOWING
+        elif not isInRange and self.behavior == EnemyBehavior.FOLLOWING:
+            self.behavior = EnemeyBehavior.SEEKING
+        return isInRange
+
+    def calcTrackingVelocity(self, player):
+        self.target = player.center
+
     def draw(self, screen, player):
         # calls parent, Agent
         super().draw(screen)
         if self.behavior == EnemyBehavior.FOLLOWING:
             # line position
-            startingPos = (self.center.x, self.center.y)
-            nextPos = (player.center.x, player.center.y)
-            pygame.draw.line(screen, Constants.SEEKING_LINE_COLOR, startingPos, nextPos)
+            centerPos = (self.center.x, self.center.y)
+            targetPos = (self.target.x, self.target.y)
+            pygame.draw.line(screen, Constants.SEEKING_LINE_COLOR, centerPos, targetPos)
 
     # seeking behavior
     def seek(self, player):
         # finds the player's current position from enemy position
-        range = player.position - self.position
-        length = range.length()
+        movementDirection = self.target - self.position
 
         # if player is within range, seeks
-        if length < Constants.ATTACK_RANGE:
-            self.velocity = range.normalize()
-            self.behavior = EnemyBehavior.FOLLOWING
+        if self.isPlayerClose(player):
+            self.velocity = movementDirection.normalize()
         # stops movement
         else:
             self.velocity = Constants.ZERO_VECTOR
-            self.behavior = EnemyBehavior.SEEKING
 
     # fleeing behavior
     def flee(self, player):
         # finds the player's current position from enemy position
-        range = player.position - self.position
-        length = range.length()
+        movementDirection = self.position - self.target
 
         # if player is within range, flees
-        if length < Constants.ATTACK_RANGE:
-            self.velocity = range.normalize().scale(-1)
+        if self.isPlayerClose(player):
+            self.velocity = movementDirection.normalize()
         # stops movement
         else:
             self.velocity = Constants.ZERO_VECTOR
 
     def update(self, boundx, boundy, player):
+        self.calcTrackingVelocity(player)
+
         # checks to see if there is a collision and if there are no invulnerabilty frames
-        if self.collision(player) and self.iFrames == 0:
+        if self.isInCollision(player) and self.iFrames == 0:
             # sets frames to constant I-Frames
             self.iFrames = Constants.I_FRAMES
-            # changes behavior based on what it is currently
-            if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
-                self.behavior = EnemyBehavior.FLEEING
-            elif self.behavior == EnemyBehavior.FLEEING:
-                self.behavior = EnemyBehavior.SEEKING
+            self.switchMode()
         
         # depending on which behavior, calls seek or flee methods
         if self.behavior == EnemyBehavior.SEEKING or self.behavior == EnemyBehavior.FOLLOWING:
