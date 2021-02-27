@@ -3,15 +3,16 @@ import Constants
 from Vector import Vector
 
 class Agent:
-    def __init__(self, initialPosition, initialSpeed, size, color):
+    def __init__(self, initialPosition, initialSpeed, size, color, surface):
         self.position = initialPosition
         self.speed = initialSpeed
         self.velocity = Constants.ZERO_VECTOR
-        self.size = Vector(size, size)
+        self.size = size
         self.color = color
         self.target = Constants.ZERO_VECTOR
         self.updateRect()
         self.updateCenter()
+        self.surface = surface
 
     def __str__(self):
         return "Size: {}, Position: {}, Velocity: {}, Center: {}".format(self.size, self.position, self.velocity, self.center)
@@ -51,8 +52,7 @@ class Agent:
         self.updateCenter();
 
     def draw(self, screen):
-        # draws the rectangle
-        pygame.draw.rect(screen, self.color, self.rect)
+        screen.blit(self.surface, [self.position.x, self.position.y])
 
         # line positions
         startingPos = (self.position.x, self.position.y)
