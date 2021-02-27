@@ -1,3 +1,5 @@
+import math
+
 class Vector:
     def __init__(self, x, y):
         self.x = x
@@ -32,5 +34,11 @@ class Vector:
         if(self.x == 0 and self.y == 0):
             return self
         return self.scale(1 / self.length())
+
+    def angle(self):
+        return math.degrees(math.atan2(-self.y, self.x)) - 90
+
+    def toTuple(self):
+        return (self.x, self.y)
 
 

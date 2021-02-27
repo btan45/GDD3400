@@ -1,6 +1,7 @@
 import pygame
 import Constants
 import random
+import VectorRandom
 from Vector import Vector
 from Player import Player
 from Enemy import Enemy
@@ -8,12 +9,6 @@ from EnemyHunter import EnemyHunter
 from UserInterface import UserInterface
 from Sheep import Sheep
 from Dog import Dog
-
-# random vector generator
-def randomVector():
-    randomx = random.randint(0, Constants.WORLD_WIDTH)
-    randomy = random.randint(0, Constants.WORLD_HEIGHT)
-    return Vector(randomx, randomy)
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -29,13 +24,13 @@ sheepImage = pygame.image.load("sheep.png")
 isRunning = False
 
 # create player
-dog = Dog(Constants.PLAYER_POSITION, Constants.PLAYER_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR, dogImage)
+dog = Dog(Constants.PLAYER_POSITION, Constants.DOG_INITIAL_SPEED, Constants.DOG_MAX_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR, dogImage)
 
-# enemy list
+# agents list
 agents = []
 # fill in list with enemies
 for i in range(Constants.NUM_ENEMIES):
-    sheep = Sheep(randomVector(), Constants.ENEMY_SPEED, Constants.SHEEP_SIZE, Constants.ENEMY_COLOR, sheepImage)
+    sheep = Sheep(VectorRandom.randomPosition(), Constants.SHEEP_INITIAL_SPEED, Constants.SHEEP_MAX_SPEED, Constants.SHEEP_SIZE, Constants.ENEMY_COLOR, sheepImage)
     agents.append(sheep)
 
 # game loop

@@ -31,8 +31,12 @@ class Dog(Agent):
         # moves right
         elif pressed[pygame.K_d]:
             self.velocity = Constants.RIGHT_VECTOR
+        
+        if pressed[pygame.K_s] or pressed[pygame.K_a] or pressed[pygame.K_w] or pressed[pygame.K_d]:
+            self.speed = self.maxSpeed
         else:
-            self.velocity = Constants.ZERO_VECTOR
+            self.speed = 0
+
 
     def update(self, boundx, boundy):
         self.handleKeyPressed()
