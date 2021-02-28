@@ -17,17 +17,31 @@ class Sheep(Agent):
         isInRange = length < Constants.SHEEP_NEIGHBOR_RADIUS
         return isInRange
 
-    def draw(self, screen, others):
+    def draw(self, screen, boundx, boundy, otherSheep, dog):
         super().draw(screen)
         if UserInterface.NeighborLines:
-            for other in others:
-                if self is not other and self.isOtherClose(other):
-                    pygame.draw.line(screen, Constants.LINE_COLOR, self.center.toTuple(), other.center.toTuple())
+            for sheep in otherSheep:
+                if self is not sheep and self.isOtherClose(sheep):
+                    pygame.draw.line(screen, Constants.LINE_COLOR, self.center.toTuple(), sheep.center.toTuple())
         if UserInterface.SheepVelocityLine:
             # line positions
             nextPos = self.center + self.velocity.scale(self.speed * Constants.SHEEP_VELOCITY_VISIBILITY)
             # drawing line
             pygame.draw.line(screen, self.color, self.center.toTuple(), nextPos.toTuple())
+        if UserInterface.DogForceLine and self.isOtherClose(dog):
+            pygame.draw.line(screen, Constants.SEEKING_LINE_COLOR, self.center.toTuple(), dog.center.toTuple())
+        if UserInterface.BoundaryForceLines:
+            if self.center.x < Constants.SHEEP_BOUNDARY_RADIUS:
+                pygame.draw.line(screen, Constants.BOUNDARY_LINE_COLOR, self.center.toTuple(), (0, self.center.y))
+                
+            if self.center.y < Constants.SHEEP_BOUNDARY_RADIUS:
+                pygame.draw.line(screen, Constants.BOUNDARY_LINE_COLOR, self.center.toTuple(), (self.center.x, 0))
+
+            if boundx - self.center.x < Constants.SHEEP_BOUNDARY_RADIUS:
+                pygame.draw.line(screen, Constants.BOUNDARY_LINE_COLOR, self.center.toTuple(), (boundx, self.center.y))
+
+            if boundy - self.center.y < Constants.SHEEP_BOUNDARY_RADIUS:
+                pygame.draw.line(screen, Constants.BOUNDARY_LINE_COLOR, self.center.toTuple(), (self.center.x, boundy))
 
     # fleeing behavior
     def dogInfluence(self, other):
@@ -112,15 +126,14 @@ class Sheep(Agent):
         return boundaryForce.normalize()
 
     def update(self, boundx, boundy, otherSheep, dog):
+        alignmentForce = self.alignment(otherSheep).scale(Constants.SHEEP_ALIGNMENT_WEIGHT)
+        cohesionForce = self.cohesion(otherSheep).scale(Constants.SHEEP_COHESION_WEIGHT)
+        separationForce = self.separation(otherSheep).scale(Constants.SHEEP_SEPARATION_WEIGHT)
+        dogForce = self.dogInfluence(dog).scale(Constants.SHEEP_DOG_INFLUENCE_WEIGHT)
+        boundaryForce = self.boundaries(boundx, boundy).scale(Constants.SHEEP_BOUNDARY_INFLUENCE_WEIGHT)
 
-        netForce = self.alignment(otherSheep).scale(Constants.SHEEP_ALIGNMENT_WEIGHT)
-        netForce += self.cohesion(otherSheep).scale(Constants.SHEEP_COHESION_WEIGHT)
-        netForce += self.separation(otherSheep).scale(Constants.SHEEP_SEPARATION_WEIGHT)
-        netForce += self.dogInfluence(dog).scale(Constants.SHEEP_DOG_INFLUENCE_WEIGHT)
-        netForce += self.boundaries(boundx, boundy).scale(Constants.SHEEP_BOUNDARY_INFLUENCE_WEIGHT)
+        netForce = alignmentForce + cohesionForce + separationForce + dogForce + boundaryForce
         self.velocity = netForce.normalize()
-
-        
 
         # calls parent, Agent
         super().update(boundx, boundy)

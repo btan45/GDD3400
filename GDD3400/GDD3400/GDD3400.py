@@ -51,7 +51,7 @@ while not isRunning:
     # enemy
     for sheep in sheeps:
         sheep.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)
-        sheep.draw(screen, sheeps)
+        sheep.draw(screen, Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)
 
     pygame.display.flip()
     clock.tick(Constants.FRAME_RATE)

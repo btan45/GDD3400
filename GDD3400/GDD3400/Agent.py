@@ -1,6 +1,7 @@
 import pygame
 import Constants
 from Vector import Vector
+from UserInterface import UserInterface
 
 class Agent:
     def __init__(self, initialPosition, initialSpeed, maxSpeed, size, color, surface):
@@ -61,6 +62,7 @@ class Agent:
     def draw(self, screen):
         screen.blit(self.rotatedSurface, [self.position.x, self.position.y])
 
-        pygame.draw.rect(screen, Constants.BOUNDING_COLOR, self.boundingRect, 1)
+        if UserInterface.BoundingBoxes:
+            pygame.draw.rect(screen, Constants.BOUNDING_COLOR, self.boundingRect, 1)
 
    
