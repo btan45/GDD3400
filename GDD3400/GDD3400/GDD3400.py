@@ -3,9 +3,6 @@ import Constants
 import random
 import VectorRandom
 from Vector import Vector
-from Player import Player
-from Enemy import Enemy
-from EnemyHunter import EnemyHunter
 from UserInterface import UserInterface
 from Sheep import Sheep
 from Dog import Dog
@@ -23,14 +20,14 @@ sheepImage = pygame.image.load("sheep.png")
 # controls game loop
 isRunning = False
 
-# create player
-dog = Dog(Constants.PLAYER_POSITION, Constants.DOG_INITIAL_SPEED, Constants.DOG_MAX_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR, dogImage)
+# create dog
+dog = Dog(Constants.DOG_POSITION, Constants.DOG_INITIAL_SPEED, Constants.DOG_MAX_SPEED, Constants.DOG_SIZE, dogImage)
 
 # agents list
 sheeps = []
-# fill in list with enemies
-for i in range(Constants.NUM_ENEMIES):
-    sheep = Sheep(VectorRandom.randomPosition(), Constants.SHEEP_INITIAL_SPEED, Constants.SHEEP_MAX_SPEED, Constants.SHEEP_SIZE, Constants.ENEMY_COLOR, sheepImage)
+# fill in list with sheeps
+for i in range(Constants.NUM_SHEEP):
+    sheep = Sheep(VectorRandom.randomPosition(), Constants.SHEEP_INITIAL_SPEED, Constants.SHEEP_MAX_SPEED, Constants.SHEEP_SIZE, sheepImage)
     sheeps.append(sheep)
 
 # game loop
@@ -44,11 +41,11 @@ while not isRunning:
         elif event.type == pygame.KEYDOWN:
             UserInterface.handleNumKeys(event)
 
-    # player
+    # dog
     dog.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT)
     dog.draw(screen)
 
-    # enemy
+    # sheep
     for sheep in sheeps:
         sheep.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)
         sheep.draw(screen, Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)

@@ -37,7 +37,6 @@ class Dog(Agent):
         else:
             self.speed = 0
 
-
     def update(self, boundx, boundy):
         self.handleKeyPressed()
         # calls parent, Agent

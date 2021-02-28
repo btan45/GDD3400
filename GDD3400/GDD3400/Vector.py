@@ -35,9 +35,11 @@ class Vector:
             return self
         return self.scale(1 / self.length())
 
+    # computes angle of the vector
     def angle(self):
         return math.degrees(math.atan2(-self.y, self.x)) - 90
 
+    # converts vector to tuple
     def toTuple(self):
         return (self.x, self.y)
 

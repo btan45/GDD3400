@@ -4,13 +4,12 @@ from Vector import Vector
 from UserInterface import UserInterface
 
 class Agent:
-    def __init__(self, initialPosition, initialSpeed, maxSpeed, size, color, surface):
+    def __init__(self, initialPosition, initialSpeed, maxSpeed, size, surface):
         self.position = initialPosition
         self.speed = initialSpeed
         self.maxSpeed = maxSpeed
         self.velocity = Constants.ZERO_VECTOR
         self.size = size
-        self.color = color
         self.surface = surface
         self.target = Constants.ZERO_VECTOR
         self.updateRotatedSurface()
@@ -62,6 +61,7 @@ class Agent:
     def draw(self, screen):
         screen.blit(self.rotatedSurface, [self.position.x, self.position.y])
 
+        # toggle turns on and off bounding boxes
         if UserInterface.BoundingBoxes:
             pygame.draw.rect(screen, Constants.BOUNDING_COLOR, self.boundingRect, 1)
 
