@@ -6,11 +6,11 @@ class UserInterface():
     BoundaryForceLines = False
     NeighborLines = False
     BoundingBoxes = False
-    DogForces = False
+    DogForces = True
     AlignmentForces = True
     SeparationForces = True
     CohesionForces = True
-    BoundaryForces = False
+    BoundaryForces = True
 
     @staticmethod
     def handleNumKeys(event):

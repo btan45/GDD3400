@@ -24,14 +24,14 @@ sheepImage = pygame.image.load("sheep.png")
 isRunning = False
 
 # create player
-# dog = Dog(Constants.PLAYER_POSITION, Constants.DOG_INITIAL_SPEED, Constants.DOG_MAX_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR, dogImage)
+dog = Dog(Constants.PLAYER_POSITION, Constants.DOG_INITIAL_SPEED, Constants.DOG_MAX_SPEED, Constants.PLAYER_SIZE, Constants.PLAYER_COLOR, dogImage)
 
 # agents list
-agents = []
+sheeps = []
 # fill in list with enemies
 for i in range(Constants.NUM_ENEMIES):
     sheep = Sheep(VectorRandom.randomPosition(), Constants.SHEEP_INITIAL_SPEED, Constants.SHEEP_MAX_SPEED, Constants.SHEEP_SIZE, Constants.ENEMY_COLOR, sheepImage)
-    agents.append(sheep)
+    sheeps.append(sheep)
 
 # game loop
 while not isRunning:
@@ -45,13 +45,13 @@ while not isRunning:
             UserInterface.handleNumKeys(event)
 
     # player
-    # dog.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT)
-    # dog.draw(screen)
+    dog.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT)
+    dog.draw(screen)
 
     # enemy
-    for agent in agents:
-        agent.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, agents)
-        agent.draw(screen, agents)
+    for sheep in sheeps:
+        sheep.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)
+        sheep.draw(screen, sheeps)
 
     pygame.display.flip()
     clock.tick(Constants.FRAME_RATE)

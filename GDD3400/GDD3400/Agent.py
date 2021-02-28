@@ -40,10 +40,8 @@ class Agent:
         return pygame.Rect.colliderect(self.boundingRect, object.boundingRect)
 
     def update(self, boundx, boundy):
-        # velocity
-        self.velocity = self.velocity.scale(self.speed)
         # position
-        self.position += self.velocity
+        self.position += self.velocity.scale(self.speed)
 
         # creates bounds for the agent
         if self.position.x < 0:
@@ -64,10 +62,5 @@ class Agent:
         screen.blit(self.rotatedSurface, [self.position.x, self.position.y])
 
         pygame.draw.rect(screen, Constants.BOUNDING_COLOR, self.boundingRect, 1)
-        # line positions
-        startingPos = (self.center.x, self.center.y)
-        nextPos = (self.center.x + (self.velocity.x * self.speed), self.center.y + (self.velocity.y * self.speed))
-        # drawing line
-        pygame.draw.line(screen, self.color, startingPos, nextPos)
 
    
