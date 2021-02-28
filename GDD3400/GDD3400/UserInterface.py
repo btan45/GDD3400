@@ -7,9 +7,9 @@ class UserInterface():
     NeighborLines = False
     BoundingBoxes = False
     DogForces = False
-    AlignmentForces = False
-    SeparationForces = False
-    CohesionForces = False
+    AlignmentForces = True
+    SeparationForces = True
+    CohesionForces = True
     BoundaryForces = False
 
     @staticmethod
