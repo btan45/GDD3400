@@ -34,7 +34,7 @@ DOG_POSITION = Vector(400, 300)
 DOG_SIZE = Vector(10, 10)
 
 # Sheep constants
-NUM_SHEEP = 100
+NUM_SHEEP = 1
 SHEEP_VELOCITY_COLOR = (0, 255, 0)
 SHEEP_SIZE = Vector(16, 32)
 SHEEP_INITIAL_SPEED = 5
@@ -60,3 +60,31 @@ UPPER_LEFT_VECTOR = Vector(-1, -1).normalize()
 LOWER_LEFT_VECTOR = Vector(-1, 1).normalize()
 LOWER_RIGHT_VECTOR = Vector(1, 1).normalize()
 UPPER_RIGHT_VECTOR = Vector(1, -1).normalize()
+
+# Gate Constants
+GATE_COUNT = 4
+GATE_WIDTH = 100
+GATES = [ [ [104, 552], [104, 664] ], \
+	      [ [104, 216], [104, 104] ], \
+		  [ [808, 616], [696, 616] ], \
+		  [ [936, 152], [824, 152] ], \
+		  #[ [456, 440], [456, 328] ]  ]		# vertical, green is on bottom (backwards c)
+		  #[ [568, 328], [568, 440] ]  ]		# vertical, green is on top (c)
+		  [ [456, 328], [568, 328] ]  ]	# horizontal, green on left (u)
+		  #[ [568, 440], [456, 440] ]  ]	# horizontal, green on right (n)
+		  
+NBR_RANDOM_OBSTACLES = 20
+
+# Graph Constants
+GRID_SIZE = 16
+
+DEBUGGING = True
+DEBUG_LINE_WIDTH = 1
+DEBUG_BOUNDING_RECTS = DEBUGGING
+DEBUG_VELOCITY = DEBUGGING
+DEBUG_NEIGHBORS = DEBUGGING
+DEBUG_BOUNDARIES = DEBUGGING
+DEBUG_DOG_INFLUENCE = DEBUGGING
+DEBUG_OBSTACLES = DEBUGGING
+DEBUG_GRID_LINES = True
+DEBUG_NEIGHBOR_LINES = False

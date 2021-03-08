@@ -30,6 +30,7 @@
     <Compile Include="Dog.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DrawableObject.py" />
     <Compile Include="Enemy.py">
       <SubType>Code</SubType>
     </Compile>
@@ -37,6 +38,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GDD3400.py" />
+    <Compile Include="Graph.py" />
+    <Compile Include="Node.py" />
     <Compile Include="Sheep.py">
       <SubType>Code</SubType>
     </Compile>
@@ -50,6 +53,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VectorRandom.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VisitQueue.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
