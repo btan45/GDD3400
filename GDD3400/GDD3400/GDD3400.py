@@ -97,7 +97,7 @@ for i in range(Constants.NUM_SHEEP):
 buildGates(graph)
 buildObstacles(graph)
 
-dog.path = graph.findPath_Breadth(graph.getNodeFromPoint(dog.center), graph.getNodeFromPoint(sheeps[0].center))
+dog.path = graph.findPath(graph.getNodeFromPoint(dog.center), graph.getNodeFromPoint(sheeps[0].center))
 
 # game loop
 while not isRunning:
@@ -114,7 +114,7 @@ while not isRunning:
 
     # dog
     if len(dog.path) == 0:
-        dog.path = graph.findPath_Breadth(graph.getNodeFromPoint(dog.center), graph.getNodeFromPoint(sheeps[0].center))
+        dog.path = graph.findPath(graph.getNodeFromPoint(dog.center), graph.getNodeFromPoint(sheeps[0].center))
     dog.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT)
     dog.draw(screen)
 

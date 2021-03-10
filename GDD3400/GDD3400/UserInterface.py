@@ -1,4 +1,13 @@
 import pygame
+from enum import Enum
+
+
+# enum for search algorithm
+class SearchAlgorithm(Enum):
+    A_STAR = 0
+    BEST_FIRST = 1
+    DJIKSTRA = 2
+    BREADTH_FIRST = 3
 
 class UserInterface():
     # User Interface Toggles
@@ -12,6 +21,7 @@ class UserInterface():
     SeparationForces = True
     CohesionForces = True
     BoundaryForces = True
+    CurrentSearchAlogrithm = None
 
     @staticmethod
     def handleNumKeys(event):
@@ -56,3 +66,20 @@ class UserInterface():
             elif event.key == pygame.K_0:
                 print('Toggle Boundary Forces')
                 UserInterface.BoundaryForces = not UserInterface.BoundaryForces
+
+            # a key
+            elif event.key == pygame.K_a:
+                print('Toggle A*')
+                UserInterface.CurrentSearchAlogrithm = SearchAlgorithm.A_STAR
+            # s key
+            elif event.key == pygame.K_s:
+                print('Toggle Best-First')
+                UserInterface.CurrentSearchAlogrithm = SearchAlgorithm.BEST_FIRST
+            # d key
+            elif event.key == pygame.K_d:
+                print('Toggle Djikstras')
+                UserInterface.CurrentSearchAlogrithm = SearchAlgorithm.DJIKSTRA
+            # f key
+            elif event.key == pygame.K_f:
+                print('Toggle Breadth-First')
+                UserInterface.CurrentSearchAlogrithm = SearchAlgorithm.BREADTH_FIRST

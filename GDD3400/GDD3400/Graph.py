@@ -3,16 +3,13 @@ import Node
 import pygame
 import Vector
 
+from UserInterface import *
 from pygame import *
 from Vector import *
 from Node import *
 from enum import Enum
-from VisitQueue import VisitQueue
-
-class SearchType(Enum):
-	DJIKSTRA = 1
-	A_STAR = 2
-	BEST_FIRST = 3
+from queue import Queue
+from queue import PriorityQueue
 
 class Graph():
 	def __init__(self):
@@ -108,27 +105,36 @@ class Graph():
 			path[-1].isEnd = True
 		return path
 
+	def findPath(self, start, end):
+		if UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.BREADTH_FIRST:
+			return self.findPath_Breadth(start, end)
+		elif UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.DJIKSTRA:
+			return self.findPath_Djikstra(start, end)
+		elif UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.A_STAR:
+			return self.findPath_AStar(start, end)
+		elif UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.BEST_FIRST:
+			return self.findPath_BestFirst(start, end)
+		else:
+			return []
+
 	def findPath_Breadth(self, start, end):
 		""" Breadth Search """
 		self.reset()
 
 		# TODO: Add your breadth-first code here!
-		visited = set()
-		toVisit = VisitQueue()
-		toVisit.add(start)
-		visited.add(start)
+		toVisit = Queue()
+		toVisit.put(start)
+		start.isVisited = True
 
-		while not toVisit.isEmpty():
-			currentNode = toVisit.dequeue()
+		while not toVisit.empty():
+			currentNode = toVisit.get()
 			currentNode.isExplored = True
 
 			for nextNode in currentNode.neighbors:
-				if not nextNode in visited:
-					toVisit.add(nextNode)
+				if not nextNode.isVisited:
+					toVisit.put(nextNode)
 					nextNode.isVisited = True
 					nextNode.backNode = currentNode
-
-					visited.add(nextNode)
 
 					if nextNode == end:
 						return self.buildPath(end)
@@ -137,29 +143,101 @@ class Graph():
 
 	def findPath_Djikstra(self, start, end):
 		""" Djikstra's Search """
-		print("DJIKSTRA")
 		self.reset()		
 
 		# TODO: Add your Djikstra code here!
+		toVisit = PriorityQueue()
+
+		start.isVisited = True
+		start.cost = 0 
+		toVisit.put(start)
+
+		while not toVisit.empty():
+			currentNode = toVisit.get()
+			currentNode.isExplored = True
+			if currentNode == end:
+				return self.buildPath(end)
+
+			for nextNode in currentNode.neighbors:
+				distToNext = (nextNode.center - currentNode.center).length()
+				if not nextNode.isVisited:
+					nextNode.isVisited = True
+					nextNode.cost = distToNext + currentNode.cost
+					nextNode.backNode = currentNode
+					toVisit.put(nextNode)
+				else:
+					if distToNext + currentNode.cost < nextNode.cost:
+						nextNode.cost = distToNext + currentNode.cost
+						nextNode.backNode = currentNode
 
 		return []
 
 	def findPath_AStar(self, start, end):
 		""" A Star Search """
-		print("A_STAR")
 		self.reset()
 
 		# TODO: Add your A-star code here!
+		toVisit = PriorityQueue()
+
+		start.isVisited = True
+		start.costFromStart = 0
+		start.costToEnd = (end.center - start.center).length()
+		start.cost = start.costFromStart + start.costToEnd
+		toVisit.put(start)
+
+		while not toVisit.empty():
+			currentNode = toVisit.get()
+			currentNode.isExplored = True
+			if currentNode == end:
+				return self.buildPath(end)
+
+			for nextNode in currentNode.neighbors:
+				distToNext = (nextNode.center - currentNode.center).length()
+				distToEnd = (end.center - nextNode.center).length()
+
+				if not nextNode.isVisited:
+					nextNode.isVisited = True
+					nextNode.costFromStart = distToNext + currentNode.costFromStart
+					nextNode.costToEnd = distToEnd
+					nextNode.cost = nextNode.costFromStart + nextNode.costToEnd
+					nextNode.backNode = currentNode
+					toVisit.put(nextNode)
+				else:
+					if distToNext + currentNode.costFromStart < nextNode.costFromStart:
+						nextNode.costFromStart = distToNext + currentNode.costFromStart
+						nextNode.cost = nextNode.costFromStart + distToEnd
+						nextNode.backNode = currentNode
 
 		return []
 
 	def findPath_BestFirst(self, start, end):
 		""" Best First Search """
-		print("BEST_FIRST")
 		self.reset()
 
 		# TODO: Add your Best-first code here!
+		toVisit = PriorityQueue()
 
+		start.isVisited = True
+		start.cost = (end.center - start.center).length()
+		toVisit.put(start)
+
+		while not toVisit.empty():
+			currentNode = toVisit.get()
+			currentNode.isExplored = True
+			if currentNode == end:
+				return self.buildPath(end)
+
+			for nextNode in currentNode.neighbors:
+				distToEnd = (end.center - nextNode.center).length()
+				if not nextNode.isVisited:
+					nextNode.isVisited = True
+					nextNode.cost = distToEnd
+					nextNode.backNode = currentNode
+					toVisit.put(nextNode)
+				else:
+					if distToEnd < nextNode.cost:
+						nextNode.cost = distToEnd
+						nextNode.backNode = currentNode
 		return []
 
 	def draw(self, screen):
