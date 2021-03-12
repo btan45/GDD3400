@@ -120,7 +120,7 @@ while not isRunning:
 
     # sheep
     for sheep in sheeps:
-        sheep.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)
+        sheep.update(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog, graph.obstacles)
         sheep.draw(screen, Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT, sheeps, dog)
 
     pygame.display.flip()

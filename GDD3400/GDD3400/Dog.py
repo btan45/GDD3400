@@ -11,13 +11,20 @@ class Dog(Agent):
     def followPath(self):
         if self.path:
             nextNode = self.path[0]
-            self.velocity = (nextNode.center - self.center).normalize()
+            nextVelocity = (nextNode.center - self.center).normalize()
 
             if nextNode.isInCollision(self):
                 self.path.remove(nextNode)
 
+            return nextVelocity
+        else:
+            return Constants.ZERO_VECTOR
+
     def update(self, boundx, boundy):
-        self.followPath()
+        nextVelocity = self.followPath()
+        angluarVelocity = (nextVelocity - self.velocity).scale(Constants.DOG_ANGULAR_SPEED)
+        self.velocity += angluarVelocity
+        self.velocity.normalize()
         # calls parent, Agent
         super().update(boundx, boundy)
   

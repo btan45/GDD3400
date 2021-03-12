@@ -153,7 +153,16 @@ class Sheep(Agent):
             boundaryForce += Constants.UP_VECTOR
         return boundaryForce.normalize()
 
-    def update(self, boundx, boundy, otherSheep, dog):
+    def obstacles(self, obstacleList):
+        obstacleForce = Constants.ZERO_VECTOR
+
+        for obstacle in obstacleList:
+            distanceToObstacle = self.center - obstacle.center 
+            if distanceToObstacle.length() < Constants.SHEEP_BOUNDARY_RADIUS:
+                obstacleForce += distanceToObstacle
+        return obstacleForce.normalize()
+
+    def update(self, boundx, boundy, otherSheep, dog, obstacleList):
         # calculates list of neighbors
         self.neighbors = self.calculateNeighbors(otherSheep)
 
@@ -163,10 +172,13 @@ class Sheep(Agent):
         separationForce = self.separation(otherSheep).scale(Constants.SHEEP_SEPARATION_WEIGHT)
         dogForce = self.dogInfluence(dog).scale(Constants.SHEEP_DOG_INFLUENCE_WEIGHT)
         boundaryForce = self.boundaries(boundx, boundy).scale(Constants.SHEEP_BOUNDARY_INFLUENCE_WEIGHT)
+        obstacleForce = self.obstacles(obstacleList).scale(Constants.SHEEP_OBSTACLE_INFLUENCE_WEIGHT)
 
         # adds forces
-        netForce = alignmentForce + cohesionForce + separationForce + dogForce + boundaryForce
-        self.velocity = netForce.normalize()
+        netForce = alignmentForce + cohesionForce + separationForce + dogForce + boundaryForce + obstacleForce
+        angluarVelocity = (netForce - self.velocity).scale(Constants.SHEEP_ANGULAR_SPEED)
+        self.velocity += angluarVelocity
+        self.velocity = self.velocity.normalize()
 
         # calls parent, Agent
         super().update(boundx, boundy)
