@@ -8,6 +8,7 @@ class Dog(Agent):
          super().__init__(initialPosition, initialSpeed, maxSpeed, size, surface)
          self.path = []
 
+    # dog follows the path
     def followPath(self):
         if self.path:
             nextNode = self.path[0]
@@ -22,6 +23,8 @@ class Dog(Agent):
 
     def update(self, boundx, boundy):
         nextVelocity = self.followPath()
+        # angular movment
+        # slowly moving the dog angle so it is not as abrupt
         angluarVelocity = (nextVelocity - self.velocity).scale(Constants.DOG_ANGULAR_SPEED)
         self.velocity += angluarVelocity
         self.velocity.normalize()

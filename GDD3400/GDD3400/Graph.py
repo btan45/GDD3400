@@ -105,13 +105,18 @@ class Graph():
 			path[-1].isEnd = True
 		return path
 
+	# user input, finds which algorithm to switch to
 	def findPath(self, start, end):
+		# breadth first
 		if UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.BREADTH_FIRST:
 			return self.findPath_Breadth(start, end)
+		# djikstra
 		elif UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.DJIKSTRA:
 			return self.findPath_Djikstra(start, end)
+		# A*
 		elif UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.A_STAR:
 			return self.findPath_AStar(start, end)
+		# best first
 		elif UserInterface.CurrentSearchAlogrithm == SearchAlgorithm.BEST_FIRST:
 			return self.findPath_BestFirst(start, end)
 		else:
@@ -122,10 +127,12 @@ class Graph():
 		self.reset()
 
 		# TODO: Add your breadth-first code here!
+		# used psuedo code from power point
 		toVisit = Queue()
 		toVisit.put(start)
 		start.isVisited = True
 
+		# while the list to visit nodes is not empty
 		while not toVisit.empty():
 			currentNode = toVisit.get()
 			currentNode.isExplored = True
@@ -146,12 +153,14 @@ class Graph():
 		self.reset()		
 
 		# TODO: Add your Djikstra code here!
+		# used psuedo code from power point
 		toVisit = PriorityQueue()
 
 		start.isVisited = True
 		start.cost = 0 
 		toVisit.put(start)
 
+		# while the list to visit nodes is not empty
 		while not toVisit.empty():
 			currentNode = toVisit.get()
 			currentNode.isExplored = True
@@ -177,14 +186,17 @@ class Graph():
 		self.reset()
 
 		# TODO: Add your A-star code here!
+		# combination of others
 		toVisit = PriorityQueue()
 
 		start.isVisited = True
+		# finds estimated and actual 
 		start.costFromStart = 0
 		start.costToEnd = (end.center - start.center).length()
 		start.cost = start.costFromStart + start.costToEnd
 		toVisit.put(start)
 
+		# while the list to visit nodes is not empty
 		while not toVisit.empty():
 			currentNode = toVisit.get()
 			currentNode.isExplored = True
@@ -215,12 +227,14 @@ class Graph():
 		self.reset()
 
 		# TODO: Add your Best-first code here!
+		# combination of others
 		toVisit = PriorityQueue()
 
 		start.isVisited = True
 		start.cost = (end.center - start.center).length()
 		toVisit.put(start)
 
+		# while the list to visit nodes is not empty
 		while not toVisit.empty():
 			currentNode = toVisit.get()
 			currentNode.isExplored = True

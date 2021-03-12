@@ -153,10 +153,12 @@ class Sheep(Agent):
             boundaryForce += Constants.UP_VECTOR
         return boundaryForce.normalize()
 
+    # checks for obstacles
     def obstacles(self, obstacleList):
         obstacleForce = Constants.ZERO_VECTOR
 
         for obstacle in obstacleList:
+            # finds the opposite vector
             distanceToObstacle = self.center - obstacle.center 
             if distanceToObstacle.length() < Constants.SHEEP_BOUNDARY_RADIUS:
                 obstacleForce += distanceToObstacle
@@ -176,6 +178,8 @@ class Sheep(Agent):
 
         # adds forces
         netForce = alignmentForce + cohesionForce + separationForce + dogForce + boundaryForce + obstacleForce
+        # angular movment
+        # slowly moving the sheep angle so it is not as abrupt
         angluarVelocity = (netForce - self.velocity).scale(Constants.SHEEP_ANGULAR_SPEED)
         self.velocity += angluarVelocity
         self.velocity = self.velocity.normalize()
