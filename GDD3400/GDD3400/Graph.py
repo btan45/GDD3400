@@ -137,6 +137,7 @@ class Graph():
 			currentNode = toVisit.get()
 			currentNode.isExplored = True
 
+			# goes through the nodes
 			for nextNode in currentNode.neighbors:
 				if not nextNode.isVisited:
 					toVisit.put(nextNode)
@@ -167,6 +168,7 @@ class Graph():
 			if currentNode == end:
 				return self.buildPath(end)
 
+			# goes through the nodes
 			for nextNode in currentNode.neighbors:
 				distToNext = (nextNode.center - currentNode.center).length()
 				if not nextNode.isVisited:
@@ -203,6 +205,7 @@ class Graph():
 			if currentNode == end:
 				return self.buildPath(end)
 
+			# goes through the nodes
 			for nextNode in currentNode.neighbors:
 				distToNext = (nextNode.center - currentNode.center).length()
 				distToEnd = (end.center - nextNode.center).length()
@@ -241,6 +244,7 @@ class Graph():
 			if currentNode == end:
 				return self.buildPath(end)
 
+			# goes through the nodes
 			for nextNode in currentNode.neighbors:
 				distToEnd = (end.center - nextNode.center).length()
 				if not nextNode.isVisited:
